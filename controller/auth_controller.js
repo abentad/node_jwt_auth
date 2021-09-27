@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken'); 
 
 //handle errors
 const handleError = (error) => {
@@ -19,6 +20,11 @@ const handleError = (error) => {
     return compiledError;
 }
 
+const maxAge = 7 * 24 * 60 * 60;
+const createToken = (id) => {
+    return jwt.sign({ id }, 'key to hash the jwt with', {expiresIn: maxAge});
+}
+
 
 module.exports = {
     signup: async (req,res)=>{
@@ -27,7 +33,9 @@ module.exports = {
         try {
             //will create a user object using the model "User" and stores it to mongodb and also stores it into variable 'user' locally after storing to db
             const user = await User.create({ username, email, password });
-            res.status(201).json(user);
+            const token = createToken(user.id);
+            const responseData = {username: user.username, email: user.email, userId: user.id, token: token };
+            res.status(201).json( responseData );
         } catch (error) {
             const errors =  handleError(error);
             res.status(400).json({ errors });

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
+const bcrypt = require('bcrypt');
  
 //it will create a schema defining the data that is going to be stored in the mongo database
 //username: is required, is unique, islowercase
@@ -24,6 +25,12 @@ const userSchema = new mongoose.Schema({
           minlength: [8, 'Minimum password length required is 8 characters'] 
      } 
 }); 
+
+userSchema.pre('save', async function(next){
+     const salt = await bcrypt.genSalt();
+     this.password = await bcrypt.hash(this.password, salt);
+     next();
+});
  
 //will create a model called "User" that connects to collection called 'users' using the schema above to our database
 const User = mongoose.model('user', userSchema); 
