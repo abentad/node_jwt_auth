@@ -26,11 +26,25 @@ const userSchema = new mongoose.Schema({
      } 
 }); 
 
+//this method runs before every document is stored to database because it is '.pre' if you want to run something after the data is stored to db use '.post'
 userSchema.pre('save', async function(next){
      const salt = await bcrypt.genSalt();
      this.password = await bcrypt.hash(this.password, salt);
      next();
 });
+
+//static method to signin users
+userSchema.statics.signin = async function(email, password) {
+     const user = await this.findOne({ email });
+     if(user){
+       const auth = await bcrypt.compare(password, user.password);
+       if(auth){
+          return user;
+       }
+       throw Error('incorrect password');
+     }
+     throw Error('incorrect email');
+}
  
 //will create a model called "User" that connects to collection called 'users' using the schema above to our database
 const User = mongoose.model('user', userSchema); 

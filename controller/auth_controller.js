@@ -5,9 +5,18 @@ const jwt = require('jsonwebtoken');
 const handleError = (error) => {
     console.log(error.message, error.code);
     let compiledError = { username: '', email: '', password: '' };
+    //incorrect email
+    if(error.message === 'incorrect email'){
+        compiledError['email'] = 'Email is not registered.';
+    }
+    //incorrect password
+    if(error.message === 'incorrect password'){
+        compiledError['password'] = 'Password is incorrect.';
+    }
+
     //duplicate errors
     if(error.code === 11000){
-        compiledError['email'] = 'Email is already registered';
+        compiledError['email'] = 'Email is already registered.';
         return compiledError;
     }
     //validation errors
@@ -20,6 +29,7 @@ const handleError = (error) => {
     return compiledError;
 }
 
+//creates a token using the users id
 const maxAge = 7 * 24 * 60 * 60;
 const createToken = (id) => {
     return jwt.sign({ id }, 'key to hash the jwt with', {expiresIn: maxAge});
@@ -34,7 +44,7 @@ module.exports = {
             //will create a user object using the model "User" and stores it to mongodb and also stores it into variable 'user' locally after storing to db
             const user = await User.create({ username, email, password });
             const token = createToken(user.id);
-            const responseData = {username: user.username, email: user.email, userId: user.id, token: token };
+            const responseData = {userId: user.id, username: user.username, email: user.email, token: token };
             res.status(201).json( responseData );
         } catch (error) {
             const errors =  handleError(error);
@@ -42,6 +52,15 @@ module.exports = {
         }
     },
     signin: async(req,res)=>{
-        res.json({message: "signin"});
+        const { email, password } = req.body;
+        try {
+            const user = await User.signin(email, password);
+            const token = createToken(user.id);
+            const responseData = {userId: user.id, username: user.username, email: user.email, token: token };
+            res.status(200).json( responseData );
+        } catch (error) {
+            const errors = handleError(error);
+            res.status(400).json({ errors });
+        }
     }
 }
