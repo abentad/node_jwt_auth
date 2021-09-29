@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoute = require('./routes/auth_routes');
+const dataRoute = require('./routes/data_routes');
 const app = express();
 
 //middlewares
 app.use(express.json({extended: false}));
 app.use('/user', authRoute);
+app.use('/data', dataRoute);
 
 
 //connecting to mongodb and starting server

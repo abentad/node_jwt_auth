@@ -29,8 +29,8 @@ const handleError = (error) => {
     return compiledError;
 }
 
-//creates a token using the users id
-const maxAge = 7 * 24 * 60 * 60;
+//creates a token using the users id it is set to 365 days
+const maxAge = 365 * 24 * 60 * 60;
 const createToken = (id) => {
     return jwt.sign({ id }, 'key to hash the jwt with', {expiresIn: maxAge});
 }
@@ -39,7 +39,7 @@ const createToken = (id) => {
 module.exports = {
     signup: async (req,res)=>{
         console.log('sign up called'); 
-        const { username,email, password } = req.body;
+        const { username, email, password } = req.body;
         try {
             //will create a user object using the model "User" and stores it to mongodb and also stores it into variable 'user' locally after storing to db
             const user = await User.create({ username, email, password });
@@ -62,5 +62,10 @@ module.exports = {
             const errors = handleError(error);
             res.status(400).json({ errors });
         }
+    },
+    signinwithtoken: async(req,res)=>{
+        const user = await User.findById(req.userId);
+        const responseData = {userId: user.id, username: user.username, email: user.email};
+        res.status(200).json(responseData);
     }
 }
