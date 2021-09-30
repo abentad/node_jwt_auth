@@ -65,7 +65,7 @@ module.exports = {
     },
     signinwithtoken: async(req,res)=>{
         const user = await User.findById(req.userId);
-        const responseData = {userId: user.id, username: user.username, email: user.email};
+        const responseData = {userId: user.id, username: user.username, email: user.email, profile: user.profile_image};
         res.status(200).json(responseData);
     }
 }
