@@ -42,9 +42,9 @@ module.exports = {
         const { username, email, password } = req.body;
         try {
             //will create a user object using the model "User" and stores it to mongodb and also stores it into variable 'user' locally after storing to db
-            const user = await User.create({ username, email, password });
+            const user = await User.create({ username, email, password, profile_image: req.file.path });
             const token = createToken(user.id);
-            const responseData = {userId: user.id, username: user.username, email: user.email, token: token };
+            const responseData = {userId: user.id, username: user.username, email: user.email, token: token , profile: req.file.path};
             res.status(201).json( responseData );
         } catch (error) {
             const errors =  handleError(error);
@@ -56,7 +56,7 @@ module.exports = {
         try {
             const user = await User.signin(email, password);
             const token = createToken(user.id);
-            const responseData = {userId: user.id, username: user.username, email: user.email, token: token };
+            const responseData = {userId: user.id, username: user.username, email: user.email, token: token, profile: user.profile_image };
             res.status(200).json( responseData );
         } catch (error) {
             const errors = handleError(error);

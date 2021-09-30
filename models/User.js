@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema({
           type: String,
           required: [true, 'Please enter an password'],
           minlength: [8, 'Minimum password length required is 8 characters'] 
-     } 
+     },
+     profile_image: {
+          type: String,
+          required: [true, 'Please set a valid profile image']
+     }
 }); 
 
 //this method runs before every document is stored to database because it is '.pre' if you want to run something after the data is stored to db use '.post'
