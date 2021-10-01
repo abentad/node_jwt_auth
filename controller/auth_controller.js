@@ -52,6 +52,7 @@ module.exports = {
         }
     },
     signin: async(req,res)=>{
+        console.log('sign in called'); 
         const { email, password } = req.body;
         try {
             const user = await User.signin(email, password);

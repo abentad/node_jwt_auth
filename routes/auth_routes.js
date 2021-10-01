@@ -1,15 +1,10 @@
 const router = require('express').Router();
 const {signup, signin, signinwithtoken } = require('../controller/auth_controller');
 const { requireAuth } = require('../middleware/auth_middleware');
-const multer = require('multer');
 const path = require('path');
 const sharp = require('sharp');
+const upload = require('../utils/multer');
 
-//multer
-//will create a memory temp storage to store the buffers of the selected image file
-//then multer will use that storage to upload a single image file in the signup route
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 
 //sharp
 //will create a file name for the modified file and stores it in the uploads folder

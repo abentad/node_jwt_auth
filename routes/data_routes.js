@@ -1,7 +1,12 @@
 const { requireAuth } = require('../middleware/auth_middleware');
 
 const router = require('express').Router();
+const upload = require('../utils/multer');
 
+//multer
+const uploadProductImages = upload.array('gallery', 3);
+
+ 
 router.get('/posts', requireAuth, (req,res)=>{
     res.status(200).json(
         {"widget": {
