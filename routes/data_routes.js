@@ -43,5 +43,11 @@ router.post('/post', requireAuth, uploadProductImages, modifyProductImage, async
     }
 });
 
+router.get('/products', requireAuth, async (req,res)=> {
+    console.log('get products called');
+    const products = await Product.find();
+    res.status(200).json( products );
+});
+
 
 module.exports = router;
