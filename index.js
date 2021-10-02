@@ -13,7 +13,9 @@ app.get('/',(req,res)=>{
     res.status(200).json({message: "go to /user or /data"});
 })
 //
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads/profiles', express.static('uploads/profiles'));
+app.use('/uploads/products', express.static('uploads/products'));
+
 
 
 //connecting to mongodb and starting server

@@ -17,8 +17,8 @@ function getRandomInt(max) {
 //then sets the req.file.path to be the newly modified files' path to be passed to the next function so it can be accessed using req.file.path
 const modifyProfileImage =  async (req, res, next) => {
     try {
-        const fileName = 'uploads/profiles' + 'profile_' + Date.now() +  getRandomInt(100) + getRandomInt(100) + '.jpg';
-        await sharp(req.file.buffer).resize(120,120,{fit: 'contain'}).jpeg({ quality: 50 }).toFile(fileName);
+        const fileName = 'uploads/profiles/' + 'profile_' + Date.now() +  getRandomInt(100) + getRandomInt(100) + '.jpg';
+        await sharp(req.file.buffer).resize(120,120).jpeg({ quality: 50 }).toFile(fileName);
         req.file.path = fileName;
     } catch (error) {
         console.log(error);
