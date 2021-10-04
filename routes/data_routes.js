@@ -18,7 +18,7 @@ const modifyProductImage =  async (req, res, next) => {
         for(var i = 0; i < req.files.length; i++){
             const fileName = 'uploads/products/' + 'product_' + Date.now() + '_' + getRandomInt(100) + getRandomInt(100) + '.jpg';
             console.log('called once for', req.files[i]);
-            await sharp(req.files[i].buffer).resize(520,430).jpeg({ quality: 70 }).toFile(fileName);
+            await sharp(req.files[i].buffer).jpeg({ quality: 70 }).toFile(fileName);
             productImageList.push(fileName);
         }
         req.files.path = productImageList;
