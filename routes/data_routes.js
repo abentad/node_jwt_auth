@@ -30,7 +30,7 @@ const modifyProductImage =  async (req, res, next) => {
 
  
 router.post('/post', requireAuth, uploadProductImages, modifyProductImage, async (req,res)=>{
-    console.log('product post called'); 
+    console.log('product post called');
     const { name, description } = req.body;
     console.log('files', req.files);
     try {
@@ -43,11 +43,46 @@ router.post('/post', requireAuth, uploadProductImages, modifyProductImage, async
     }
 });
 
-router.get('/products', requireAuth, async (req,res)=> {
+//make it paginated
+router.get('/products', requireAuth, paginatedResults(Product), async (req,res)=> {
     console.log('get products called');
-    const products = await Product.find();
-    res.status(200).json( products );
+    const result = res.paginatedResults;
+    res.status(200).json( result );
 });
+
+function  paginatedResults(model){
+    return async (req,res,next)=>{
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+    
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit; 
+        
+        const results = {};
+
+        if(endIndex < await model.countDocuments().exec()){
+            results.next = {
+                page: page + 1,
+                limit: limit
+            }
+        }
+       
+        if(startIndex > 0){
+            results.previous = {
+                page: page - 1,
+                limit: limit
+            }
+        }
+        try {
+            results.results = await model.find().limit(limit).skip(startIndex).exec(); 
+            res.paginatedResults = results;
+            next();
+        } catch (error) {
+            res.status(500).json({error: error.message});
+        }
+        
+    }
+}
 
 
 module.exports = router;

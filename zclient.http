@@ -23,9 +23,9 @@ Content-Type : application/json
 
 
 ###
-#Get posts
-GET http://localhost:3000/data/posts HTTP/1.1
-x-access-token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNTIyY2Q5ZWE0NTk4NjQ3MTBkYjE2MCIsImlhdCI6MTYzMjkzMDE2MywiZXhwIjoxNjMzNTM0OTYzfQ.zwFhY3_4CeB-0s1YULJL8se4GFfukBHbZrboMN0QZEs
+#Get products
+GET http://localhost:3000/data/products?page=1&limit=15 HTTP/1.1
+x-access-token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNWIzMDAwM2I0YTE4NWVmMGQ2OTA4ZiIsImlhdCI6MTYzMzQ1NTg0MiwiZXhwIjoxNjY0OTkxODQyfQ.lrTfhBmI2OOt1yMlCUu-CKxYIFv_biTgwbnkFOht3dQ
 
 ###
 #Get userInfo By signing in with token
