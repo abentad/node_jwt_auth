@@ -43,7 +43,6 @@ router.post('/post', requireAuth, uploadProductImages, modifyProductImage, async
     }
 });
 
-//make it paginated
 router.get('/products', requireAuth, paginatedResults(Product), async (req,res)=> {
     console.log('get products called');
     const result = res.paginatedResults;
@@ -73,8 +72,9 @@ function  paginatedResults(model){
                 limit: limit
             }
         }
-        try {
-            results.results = await model.find().limit(limit).skip(startIndex).exec(); 
+        try {  
+            const dataResults = await model.find().limit(limit).skip(startIndex).exec(); 
+            results.results = dataResults.reverse();
             res.paginatedResults = results;
             next();
         } catch (error) {

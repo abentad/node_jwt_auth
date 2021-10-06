@@ -24,7 +24,7 @@ Content-Type : application/json
 
 ###
 #Get products
-GET http://localhost:3000/data/products?page=1&limit=15 HTTP/1.1
+GET http://localhost:3000/data/products?page=1&limit=20 HTTP/1.1
 x-access-token : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNWIzMDAwM2I0YTE4NWVmMGQ2OTA4ZiIsImlhdCI6MTYzMzQ1NTg0MiwiZXhwIjoxNjY0OTkxODQyfQ.lrTfhBmI2OOt1yMlCUu-CKxYIFv_biTgwbnkFOht3dQ
 
 ###
