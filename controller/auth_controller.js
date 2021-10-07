@@ -13,7 +13,6 @@ const handleError = (error) => {
     if(error.message === 'incorrect password'){
         compiledError['password'] = 'Password is incorrect.';
     }
-
     //duplicate errors
     if(error.code === 11000){
         compiledError['email'] = 'Email is already registered.';
@@ -25,7 +24,6 @@ const handleError = (error) => {
             compiledError[properties.path] = properties.message;
         });
     }
-
     return compiledError;
 }
 
@@ -39,12 +37,12 @@ const createToken = (id) => {
 module.exports = {
     signup: async (req,res)=>{
         console.log('sign up called'); 
-        const { username, email, password } = req.body;
+        const { username, email, password, phoneNumber } = req.body;
         try {
             //will create a user object using the model "User" and stores it to mongodb and also stores it into variable 'user' locally after storing to db
-            const user = await User.create({ username, email, password, profile_image: req.file.path });
+            const user = await User.create({ username, email, password, phoneNumber, profile_image: req.file.path, dateJoined: Date.now() });
             const token = createToken(user.id);
-            const responseData = {userId: user.id, username: user.username, email: user.email, token: token , profile: req.file.path};
+            const responseData = {userId: user.id, username: user.username, email: user.email, profile: user.profile_image, phoneNumber: user.phoneNumber, dateJoined: user.dateJoined, token: token };
             res.status(201).json( responseData );
         } catch (error) {
             const errors =  handleError(error);
@@ -57,7 +55,7 @@ module.exports = {
         try {
             const user = await User.signin(email, password);
             const token = createToken(user.id);
-            const responseData = {userId: user.id, username: user.username, email: user.email, token: token, profile: user.profile_image };
+            const responseData = {userId: user.id, username: user.username, email: user.email, profile: user.profile_image, phoneNumber: user.phoneNumber, dateJoined: user.dateJoined, token: token };
             res.status(200).json( responseData );
         } catch (error) {
             const errors = handleError(error);
@@ -66,7 +64,7 @@ module.exports = {
     },
     signinwithtoken: async(req,res)=>{
         const user = await User.findById(req.userId);
-        const responseData = {userId: user.id, username: user.username, email: user.email, profile: user.profile_image};
+        const responseData = {userId: user.id, username: user.username, email: user.email, profile: user.profile_image, phoneNumber: user.phoneNumber, dateJoined: user.dateJoined, token: token };
         res.status(200).json(responseData);
     }
 }

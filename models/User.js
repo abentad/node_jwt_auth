@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
           lowercase: true,
           validate: [isEmail, 'Please enter a valid email']
      },
+     phoneNumber: {
+          type: String,
+          required: [true, 'please enter your phone number']
+     },
      password: {
           type: String,
           required: [true, 'Please enter an password'],
@@ -27,6 +31,10 @@ const userSchema = new mongoose.Schema({
      profile_image: {
           type: String,
           required: [true, 'Please set a valid profile image']
+     },
+     dateJoined: {
+          type: Date,
+          required: true
      }
 }); 
 

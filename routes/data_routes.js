@@ -31,11 +31,12 @@ const modifyProductImage =  async (req, res, next) => {
  
 router.post('/post', requireAuth, uploadProductImages, modifyProductImage, async (req,res)=>{
     console.log('product post called');
-    const { name, description } = req.body;
+    const { name, description, posterId, posterName, posterPhoneNumber } = req.body;
     console.log('files', req.files);
     try {
-        const product = await Product.create({name, description, datePosted: Date.now(), productImages: req.files.path});
-        const responseData = {name: product.name, description: product.description, datePosted: product.datePosted, productImages: product.productImages };
+        const product = await Product.create({posterId, posterName, posterPhoneNumber, name, description, datePosted: Date.now(), productImages: req.files.path});
+        // const responseData = {name: product.name, description: product.description, datePosted: product.datePosted, productImages: product.productImages };
+        const responseData = {name: product.name };
         res.status(201).json( responseData );
     } catch (error) {
         const errors =  handleError(error);
